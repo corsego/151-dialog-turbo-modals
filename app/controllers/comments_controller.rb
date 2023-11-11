@@ -25,14 +25,20 @@ class CommentsController < ApplicationController
 
     respond_to do |format|
       if @comment.save
-        format.html { redirect_to comment_url(@comment), notice: "Comment was successfully created." }
+        # format.html { redirect_to comment_url(@comment), notice: "Comment was successfully created." }
+        # format.html { redirect_to comments_url, notice: "Comment was successfully created." }
         format.json { render :show, status: :created, location: @comment }
         format.turbo_stream do
-          render turbo_stream: turbo_stream.prepend(
-            'comments',
-            partial: "comments/comment",
-            locals: { comment: @comment }
-          )
+          # render turbo_stream: turbo_stream.prepend(
+          #   'comments',
+          #   partial: "comments/comment",
+          #   locals: { comment: @comment }
+          # )
+          # render turbo_stream: helpers.autoredirect(comments_path)
+          # render turbo_stream: helpers.autoredirect(comment_path(@comment))
+          # render turbo_stream: turbo_stream.action(:redirect, comments_path)
+          # render turbo_stream: turbo_stream.advanced_redirect(comment_path(@comment))
+          render turbo_stream: turbo_stream.advanced_redirect(comments_path)
         end
       else
         format.html { render :new, status: :unprocessable_entity }

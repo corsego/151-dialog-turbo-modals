@@ -1,0 +1,11 @@
+<%= turbo_frame_tag :modal do %>
+  <dialog data-controller="dialog" data-action="click->dialog#clickOutside"
+          class="backdrop:bg-gray-400 backdrop:bg-opacity-90 z-10 rounded-md border-4 bg-sky-900 w-full md:w-2/3 mt-24">
+    <div class="p-8">
+      <button class="bg-slate-400" data-action="dialog#close">Cancel</button>
+
+      <%= yield %>
+
+    </div>
+  </dialog>
+<% end %>

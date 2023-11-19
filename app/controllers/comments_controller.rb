@@ -1,5 +1,6 @@
 class CommentsController < ApplicationController
   before_action :set_comment, only: %i[ show edit update destroy ]
+  before_action :ensure_frame_response, only: %i[ new edit show ]
 
   # GET /comments or /comments.json
   def index
@@ -76,6 +77,11 @@ class CommentsController < ApplicationController
   end
 
   private
+
+    def ensure_frame_response
+      redirect_to root_path unless turbo_frame_request?
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_comment
       @comment = Comment.find(params[:id])

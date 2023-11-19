@@ -3,36 +3,35 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="dialog"
 export default class extends Controller {
-  static targets = ["modal", "frame"]
-
   connect() {
-    this.modalTarget.addEventListener("close", this.enableBodyScroll.bind(this))
+    this.open()
+    // needed because ESC key does not trigger close event
+    this.element.addEventListener("close", this.enableBodyScroll.bind(this))
   }
 
   disconnect() {
-    this.modalTarget.removeEventListener("close", this.enableBodyScroll.bind(this))
+    this.element.removeEventListener("close", this.enableBodyScroll.bind(this))
   }
 
   // hide modal on successful form submission
   // data-action="turbo:submit-end->turbo-modal#submitEnd"
   submitEnd(e) {
     if (e.detail.success) {
-      // console.log(e.detail.success)
       this.close()
     }
   }
 
   open() {
-    // this.modalTarget.show()
-    this.modalTarget.showModal()
+    this.element.showModal()
     document.body.classList.add('overflow-hidden')
   }
 
   close() {
-    this.modalTarget.close()
-    // document.body.classList.remove('overflow-hidden')
-    this.frameTarget.removeAttribute("src")
-    this.frameTarget.innerHTML = ""
+    this.element.close()
+    // clean up modal content
+    const frame = document.getElementById('modal')
+    frame.removeAttribute("src")
+    frame.innerHTML = ""
   }
 
   enableBodyScroll() {
@@ -40,7 +39,7 @@ export default class extends Controller {
   }
 
   clickOutside(event) {
-    if (event.target === this.modalTarget) {
+    if (event.target === this.element) {
       this.close()
     }
   }
